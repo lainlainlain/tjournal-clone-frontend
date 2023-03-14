@@ -5,10 +5,10 @@ import MoreIcon from '@material-ui/icons/MoreHorizOutlined';
 import styles from './Comment.module.scss';
 
 interface CommentPostProps {
-  user: {
+  user?: {
     fullname: string;
   };
-  text: string;
+  text?: string;
 }
 
 export const Comment: React.FC<CommentPostProps> = ({ user, text }) => {

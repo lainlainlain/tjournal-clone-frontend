@@ -9,6 +9,7 @@ import { theme } from '../theme';
 import '../styles/global.scss';
 import 'macro-css';
 import { Header } from '@/components/Header';
+import { MainLayout } from '@/layouts/MainLayout';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -24,8 +25,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
-        <Header />
-        <Component {...pageProps} />
+        <Header /> <Component {...pageProps} />
       </MuiThemeProvider>
     </>
   );

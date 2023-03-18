@@ -4,6 +4,7 @@
   position: sticky;
   top: 80px;
   margin-left: 40px;
+  margin-top: 25px;
 
   h3 {
     display: flex;
@@ -46,4 +47,13 @@
 .postTitle {
   font-size: 15px;
   font-weight: 500;
+}
+.rotated {
+  width: 100px;
+  transform-origin: right;
+  transform: rotate(-90deg) translateX(-50px);
+
+  svg {
+    transform: rotate(270deg);
+  }
 }

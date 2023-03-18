@@ -1,37 +1,35 @@
 import React from 'react';
 import { Comment } from '../../components/Comment';
 import { Divider, Paper, Tab, Tabs, Typography } from '@material-ui/core';
+import { AddComment } from '@material-ui/icons';
+import { AddCommentForm } from '../AddCommentForm';
+import data from '../../data';
 
-type CommentObj = {
-  user: {
-    fullname: string;
-    avatarUrl: string;
-  };
-  id: number;
-  text: string;
-  createdAt: string;
-};
+export const PostComments: React.FC = () => {
+  const [activeTab, setActiveTab] = React.useState(0);
 
-interface PostCommentsProps {
-  items: CommentObj[];
-}
-
-export const PostComments: React.FC<PostCommentsProps> = ({ items }) => {
+  const comments = data.comments[activeTab === 0 ? 'popular' : 'new'];
   return (
     <Paper elevation={0} className="mt-40 p-30">
       <div className="container">
         <Typography variant="h6" className="mb-20">
           42 комментария
         </Typography>
-        <Tabs className="mt-20" value={0} indicatorColor="primary" textColor="primary">
+        <Tabs
+          onChange={(_, newValue) => setActiveTab(newValue)}
+          className="mt-20"
+          value={activeTab}
+          indicatorColor="primary"
+          textColor="primary">
           <Tab label="Популярные" />
           <Tab label="По порядку" />
         </Tabs>
         <Divider />
+        <AddCommentForm></AddCommentForm>
         <div className="mb-20" />
-        {items.map((item) => (
+        {comments.map((item) => (
           <Comment
-            key={item.id}
+            key={item.id + Math.random()}
             createdAt={item.createdAt}
             text={item.text}
             user={item.user}></Comment>

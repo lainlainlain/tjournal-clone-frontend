@@ -1,0 +1,19 @@
+.form {
+  padding: 17px;
+  background-color: #f7f7f7;
+  border: rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.fieldRoot {
+  &::after,
+  &::before {
+    display: none;
+  }
+}
+
+.addCommentButton {
+  margin-top: 10px;
+}

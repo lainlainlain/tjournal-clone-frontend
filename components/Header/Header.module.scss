@@ -62,3 +62,20 @@
     }
   }
 }
+
+.loginButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+
+  &:hover {
+    color: #fda400;
+    transition: 0.15s linear;
+  }
+
+  svg {
+    margin-right: 10px;
+  }
+}

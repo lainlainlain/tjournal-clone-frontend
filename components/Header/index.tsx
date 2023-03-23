@@ -8,11 +8,22 @@ import {
   Menu as MenuIcon,
   ExpandMoreOutlined as ArrowBottom,
   NotificationsNoneOutlined as NotificationIcon,
+  AccountCircleOutlined as UserIcon,
 } from '@material-ui/icons';
 
 import styles from './Header.module.scss';
+import { AuthDialog } from '../AuthDialog';
 
 export const Header: React.FC = () => {
+  const [visible, setVisible] = React.useState(false);
+
+  const openAuthDialog = () => {
+    setVisible(true);
+  };
+
+  const closeAuthDialog = () => {
+    setVisible(false);
+  };
   return (
     <Paper classes={{ root: styles.root }} elevation={0}>
       <div className="d-flex align-center">
@@ -27,12 +38,10 @@ export const Header: React.FC = () => {
             alt="Logo"
           />
         </Link>
-
         <div className={styles.searchBlock}>
           <SearchIcon />
           <input placeholder="Поиск" />
         </div>
-
         <Link href={'/write'}>
           <Button variant="contained" className={styles.penButton}>
             Новая запись
@@ -46,15 +55,20 @@ export const Header: React.FC = () => {
         <IconButton>
           <NotificationIcon />
         </IconButton>
-        <Link href="/profile/1" className="d-flex align-center">
+        {/* <Link href="/profile/1" className="d-flex align-center">
           <Avatar
             className={styles.avatar}
             alt="Remy Sharp"
             src="https://leonardo.osnova.io/5ffeac9a-a0e5-5be6-98af-659bfaabd2a6/-/scale_crop/108x108/-/format/webp/"
           />
           <ArrowBottom />
-        </Link>
+        </Link> */}
+        <div className={styles.loginButton} onClick={openAuthDialog}>
+          <UserIcon></UserIcon>
+          Войти
+        </div>
       </div>
+      <AuthDialog visible={visible} onClose={closeAuthDialog}></AuthDialog>
     </Paper>
   );
 };

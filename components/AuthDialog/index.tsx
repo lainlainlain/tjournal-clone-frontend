@@ -39,7 +39,12 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({ visible, onClose }) => {
           </Typography>
           {formType === 'main' && <Main onOpenLoginForm={() => setFormType('login')} />}
           {formType === 'login' && <Login onOpenRegisterForm={() => setFormType('register')} />}
-          {formType === 'register' && <Register onOpenLoginForm={() => setFormType('login')} />}
+          {formType === 'register' && (
+            <Register
+              onOpenLoginForm={() => setFormType('login')}
+              onOpenRegister={() => setFormType('register')}
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

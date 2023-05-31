@@ -4,7 +4,6 @@ import { Comment } from '../../components/Comment';
 import { Divider, Paper, Tab, Tabs, Typography } from '@material-ui/core';
 import React from 'react';
 import { PostComments } from '@/components/PostComments';
-import { posts } from '@/components/SideComments';
 
 export default function Post() {
   return (

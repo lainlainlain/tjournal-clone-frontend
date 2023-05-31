@@ -4,6 +4,9 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormField } from '../../FormField';
+import { CreateUserDto } from '@/utils/api/types';
+import { UserApi } from '@/utils/api';
+import { setCookie } from 'nookies';
 
 interface RegisterProps {
   onOpenLoginForm: () => void;
@@ -16,21 +19,30 @@ export const Register: React.FC<RegisterProps> = ({ onOpenLoginForm, onOpenRegis
     resolver: yupResolver(RegisterFormSchema),
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (dto: CreateUserDto) => {
+    try {
+      const data = await UserApi.register(dto);
+      setCookie(null, 'authToken', data.token, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+    } catch (err) {
+      console.warn('Register error', err);
+    }
+  };
 
   console.log(form.formState.errors.email?.message);
 
   return (
     <FormProvider {...form}>
-      {' '}
+      <FormField name={'fullName'} label={'Полное имя'}></FormField>
+      <FormField name={'email'} label={'Почта'}></FormField>
+      <FormField name={'password'} label={'Пароль'} />
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField name={'fullname'} label={'Полное имя'}></FormField>
-        <FormField name={'email'} label={'Почта'}></FormField>
-        <FormField name={'password'} label={'Пароль'} />
         <div className="d-flex align-center justify-between">
           <Button
             onClick={onOpenRegister}
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || form.formState.isSubmitting}
             color="primary"
             variant="contained"
             type="submit">

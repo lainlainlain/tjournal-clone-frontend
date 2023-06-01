@@ -13,8 +13,11 @@ import {
 
 import styles from './Header.module.scss';
 import { AuthDialog } from '../AuthDialog';
+import { useAppSelector } from '@/redux/hooks';
+import { selectUserData } from '@/redux/slices/user';
 
 export const Header: React.FC = () => {
+  const userData = useAppSelector(selectUserData);
   const [visible, setVisible] = React.useState(false);
 
   const openAuthDialog = () => {
@@ -24,6 +27,7 @@ export const Header: React.FC = () => {
   const closeAuthDialog = () => {
     setVisible(false);
   };
+
   return (
     <Paper classes={{ root: styles.root }} elevation={0}>
       <div className="d-flex align-center">
@@ -55,18 +59,21 @@ export const Header: React.FC = () => {
         <IconButton>
           <NotificationIcon />
         </IconButton>
-        {/* <Link href="/profile/1" className="d-flex align-center">
-          <Avatar
-            className={styles.avatar}
-            alt="Remy Sharp"
-            src="https://leonardo.osnova.io/5ffeac9a-a0e5-5be6-98af-659bfaabd2a6/-/scale_crop/108x108/-/format/webp/"
-          />
-          <ArrowBottom />
-        </Link> */}
-        <div className={styles.loginButton} onClick={openAuthDialog}>
-          <UserIcon></UserIcon>
-          Войти
-        </div>
+        {userData ? (
+          <Link href="/profile/1" className="d-flex align-center">
+            <Avatar
+              className={styles.avatar}
+              alt="Remy Sharp"
+              src="https://leonardo.osnova.io/5ffeac9a-a0e5-5be6-98af-659bfaabd2a6/-/scale_crop/108x108/-/format/webp/"
+            />
+            <ArrowBottom />
+          </Link>
+        ) : (
+          <div className={styles.loginButton} onClick={openAuthDialog}>
+            <UserIcon></UserIcon>
+            Войти
+          </div>
+        )}
       </div>
       <AuthDialog visible={visible} onClose={closeAuthDialog}></AuthDialog>
     </Paper>

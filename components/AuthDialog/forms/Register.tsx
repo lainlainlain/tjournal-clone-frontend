@@ -7,6 +7,8 @@ import { FormField } from '../../FormField';
 import { CreateUserDto } from '@/utils/api/types';
 import { UserApi } from '@/utils/api';
 import { setCookie } from 'nookies';
+import { useAppDispatch } from '@/redux/hooks';
+import { setUserData } from '@/redux/slices/user';
 
 interface RegisterProps {
   onOpenLoginForm: () => void;
@@ -14,6 +16,8 @@ interface RegisterProps {
 }
 
 export const Register: React.FC<RegisterProps> = ({ onOpenLoginForm, onOpenRegister }) => {
+  const dispatch = useAppDispatch();
+
   const form = useForm({
     mode: 'onChange',
     resolver: yupResolver(RegisterFormSchema),
@@ -26,6 +30,7 @@ export const Register: React.FC<RegisterProps> = ({ onOpenLoginForm, onOpenRegis
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
+      dispatch(setUserData(data));
     } catch (err) {
       console.warn('Register error', err);
     }

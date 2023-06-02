@@ -10,7 +10,7 @@ import { setCookie } from 'nookies';
 import { Alert } from '@material-ui/lab';
 import { setTimeout } from 'timers/promises';
 import { useAppDispatch } from '@/redux/hooks';
-import { selectUserData, setUserdData } from '@/redux/slices/user';
+import { setUserData } from '@/redux/slices/user';
 
 interface LoginProps {
   onOpenRegisterForm: () => void;
@@ -32,7 +32,7 @@ export const Login: React.FC<LoginProps> = ({ onOpenRegisterForm }) => {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
-      dispatch(setUserdData(data));
+      dispatch(setUserData(data));
       console.log(data);
       setLoginMessage('Успешный вход!');
     } catch (err) {

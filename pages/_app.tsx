@@ -1,19 +1,19 @@
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
-
-// import { Header } from '../components/Header';
-
-import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
-import { theme } from '../theme';
-
-import '../styles/global.scss';
-import 'macro-css';
 import { Header } from '@/components/Header';
 import { MainLayout } from '@/layouts/MainLayout';
 import { Provider } from 'react-redux';
-import store from '../redux/store';
+import { theme } from '../theme';
+import { wrapper } from '../redux/store';
 
-function MyApp({ Component, pageProps, ...rest }) {
+import '../styles/global.scss';
+import 'macro-css';
+
+import type { AppProps } from 'next/app';
+import { FC } from 'react';
+import Head from 'next/head';
+import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
+
+const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
+  const { store, props } = wrapper.useWrappedStore(rest);
   return (
     <>
       <Head>
@@ -28,11 +28,11 @@ function MyApp({ Component, pageProps, ...rest }) {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <Provider store={store}>
-          <Header /> <Component {...pageProps} />
+          <Header /> <Component {...props.pageProps} />
         </Provider>
       </MuiThemeProvider>
     </>
   );
-}
+};
 
 export default MyApp;

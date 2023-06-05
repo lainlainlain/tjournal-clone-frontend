@@ -13,13 +13,20 @@ interface WriteFormProps {
 }
 
 export const WriteForm: React.FC<WriteFormProps> = ({ title }) => {
-  const [text, setText] = React.useState<OutputData>();
+  const [text, setText] = React.useState('');
+  const [blocks, setBlocks] = React.useState([]);
 
   return (
     <div>
-      <Input classes={{ root: styles.titleField }} placeholder="Заголовок" defaultValue={title} />
+      <Input
+        classes={{ root: styles.titleField }}
+        placeholder="Заголовок"
+        defaultValue={title}
+        value={title}
+        onChange={(e) => setText(e.target.value)}
+      />
       <div className={styles.editor}>
-        <EditorBlock data={text} onChange={setText} holder={'holder'} />
+        <EditorBlock onChange={(arr) => setBlocks(arr)} holder={'editor'} />
       </div>
       <Button variant="contained" color="primary">
         Опубликовать

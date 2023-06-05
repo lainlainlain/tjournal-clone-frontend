@@ -23,14 +23,14 @@ export default function Home() {
   );
 }
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async (ctx) => {
-  try {
-    const { authToken } = parseCookies(ctx);
+// export const getServerSideProps = wrapper.getServerSideProps((store) => async (ctx) => {
+//   try {
+//     const { authToken } = parseCookies(ctx);
 
-    const userData = await UserApi.getMe(authToken);
+//     const userData = await UserApi.getMe(authToken);
 
-    store.dispatch(setUserData(userData));
-  } catch (err) {
-    console.log(err);
-  }
-});
+//     store.dispatch(setUserData(userData));
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });

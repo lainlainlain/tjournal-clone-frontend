@@ -1,13 +1,13 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { FC, memo, useEffect, useRef } from 'react';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 
-type Props = {
+interface EditorProps {
   data?: OutputData;
-  onChange(val: OutputData): void;
+  onChange: (blocks: OutputData['blocks']) => void;
   holder: string;
-};
+}
 
-const EditorBlock = ({ data, onChange, holder }: Props) => {
+const EditorBlock: React.FC<EditorProps> = ({ data, onChange, holder }) => {
   const ref = useRef<EditorJS>();
 
   useEffect(() => {
@@ -16,8 +16,9 @@ const EditorBlock = ({ data, onChange, holder }: Props) => {
         holder: holder,
         data,
         async onChange(api, event) {
-          const data = await api.saver.save();
-          onChange(data);
+          // const data = await api.saver.save();
+          const { blocks } = await editor.save();
+          onChange(blocks);
         },
       });
       ref.current = editor;

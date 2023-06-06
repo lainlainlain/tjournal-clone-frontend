@@ -18,15 +18,21 @@ import { selectUserData } from '@/redux/slices/user';
 
 export const Header: React.FC = () => {
   const userData = useAppSelector(selectUserData);
-  const [visible, setVisible] = React.useState(false);
+  const [authVisible, setAuthVisible] = React.useState(false);
 
   const openAuthDialog = () => {
-    setVisible(true);
+    setAuthVisible(true);
   };
 
   const closeAuthDialog = () => {
-    setVisible(false);
+    setAuthVisible(false);
   };
+
+  React.useEffect(() => {
+    if (userData && authVisible) {
+      setAuthVisible(false);
+    }
+  }, [userData, authVisible]);
 
   return (
     <Paper classes={{ root: styles.root }} elevation={0}>
@@ -75,7 +81,7 @@ export const Header: React.FC = () => {
           </div>
         )}
       </div>
-      <AuthDialog visible={visible} onClose={closeAuthDialog}></AuthDialog>
+      <AuthDialog visible={authVisible} onClose={closeAuthDialog}></AuthDialog>
     </Paper>
   );
 };

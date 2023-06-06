@@ -12,9 +12,10 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { MuiThemeProvider, CssBaseline } from '@material-ui/core';
 import { setUserData } from '@/redux/slices/user';
-import { UserApi } from '@/utils/api';
+import { UserApi } from '@/utils/api/user';
 import { parseCookies } from 'nookies';
 import { GetServerSideProps } from 'next';
+import { Api } from '@/utils/api';
 
 const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -41,12 +42,16 @@ const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
 
 MyApp.getInitialProps = wrapper.getInitialAppProps((store) => async ({ ctx, Component }) => {
   try {
-    const { authToken } = parseCookies(ctx);
-    const userData = await UserApi.getMe(authToken);
+    const userData = await Api(ctx).user.getMe();
 
     store.dispatch(setUserData(userData));
   } catch (err) {
-    console.log(err);
+    if (ctx.asPath === '/write') {
+      ctx.res?.writeHead(302, {
+        Location: '/403',
+      });
+      ctx.res?.end();
+    }
   }
 
   return {

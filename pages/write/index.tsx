@@ -1,7 +1,7 @@
-import { WriteForm } from '../components/WriteForm/index';
-import { NextPage } from 'next';
 import React from 'react';
 import { MainLayout } from '@/layouts/MainLayout';
+import { WriteForm } from '../../components/WriteForm/index';
+import { NextPage } from 'next';
 
 const WritePage: NextPage = () => {
   return (

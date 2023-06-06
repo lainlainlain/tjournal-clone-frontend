@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormField } from '../../FormField';
 import { CreateUserDto } from '@/utils/api/types';
-import { UserApi } from '@/utils/api';
+import { UserApi } from '@/utils/api/user';
 import { setCookie } from 'nookies';
 import { useAppDispatch } from '@/redux/hooks';
 import { setUserData } from '@/redux/slices/user';

@@ -2,19 +2,22 @@ import React, { FC, memo, useEffect, useRef } from 'react';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 
 interface EditorProps {
-  data?: OutputData;
+  initialBlocks?: OutputData['blocks'];
   onChange: (blocks: OutputData['blocks']) => void;
   holder: string;
 }
 
-const EditorBlock: React.FC<EditorProps> = ({ data, onChange, holder }) => {
+const EditorBlock: React.FC<EditorProps> = ({ initialBlocks, onChange, holder }) => {
   const ref = useRef<EditorJS>();
 
   useEffect(() => {
     if (!ref.current) {
       const editor = new EditorJS({
         holder: holder,
-        data,
+        placeholder: 'Введите текст вашей статьи',
+        data: {
+          blocks: initialBlocks,
+        },
         async onChange(api, event) {
           // const data = await api.saver.save();
           const { blocks } = await editor.save();

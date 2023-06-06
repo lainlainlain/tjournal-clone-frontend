@@ -20,13 +20,13 @@ export const userSlice = createSlice({
     },
   },
 
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(HYDRATE, (state, action: any) => {
       return {
         ...state,
         ...action.payload.user,
       };
-    },
+    });
   },
 });
 

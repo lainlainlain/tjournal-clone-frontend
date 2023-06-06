@@ -5,12 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormField } from '../../FormField';
 import { LoginDto } from '@/utils/api/types';
-import { UserApi } from '@/utils/api';
+import { UserApi } from '@/utils/api/user';
 import { setCookie } from 'nookies';
 import { Alert } from '@material-ui/lab';
 import { setTimeout } from 'timers/promises';
 import { useAppDispatch } from '@/redux/hooks';
 import { setUserData } from '@/redux/slices/user';
+import { Api } from '@/utils/api';
 
 interface LoginProps {
   onOpenRegisterForm: () => void;
@@ -27,7 +28,7 @@ export const Login: React.FC<LoginProps> = ({ onOpenRegisterForm }) => {
 
   const onSubmit = async (dto: LoginDto) => {
     try {
-      const data = await UserApi.login(dto);
+      const data = await Api().user.login(dto);
       setCookie(null, 'authToken', data.token, {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',

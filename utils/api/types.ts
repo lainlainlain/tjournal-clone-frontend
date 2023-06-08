@@ -29,3 +29,12 @@ export type PostItem = {
   updatedAt: string;
   views: number;
 };
+
+export type CommentItem = {
+  test: string;
+  post: PostItem;
+  user: ResponseUser;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+};

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MainLayout } from '@/layouts/MainLayout';
 import { WriteForm } from '../../components/WriteForm/index';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { Api } from '@/utils/api';
 
 interface WritePageProps {
@@ -17,10 +17,12 @@ const WritePage: NextPage<WritePageProps> = ({ post }) => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
-    const pageId = ctx.params.id;
+    const pageId = ctx!.params!.id!;
+
     const post = await Api(ctx).post.getOne(+pageId);
+
     const user = await Api(ctx).user.getMe();
 
     if (post.user.id !== user.id) {

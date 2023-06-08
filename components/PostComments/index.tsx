@@ -5,7 +5,11 @@ import { AddComment } from '@material-ui/icons';
 import { AddCommentForm } from '../AddCommentForm';
 import data from '../../data';
 
-export const PostComments: React.FC = () => {
+interface PostCommentsProps {
+  postId: number;
+}
+
+export const PostComments: React.FC<PostCommentsProps> = ({ postId }) => {
   const [activeTab, setActiveTab] = React.useState(0);
 
   const comments = data.comments[activeTab === 0 ? 'popular' : 'new'];
@@ -25,7 +29,7 @@ export const PostComments: React.FC = () => {
           <Tab label="По порядку" />
         </Tabs>
         <Divider />
-        <AddCommentForm></AddCommentForm>
+        <AddCommentForm postId={postId}></AddCommentForm>
         <div className="mb-20" />
         {comments.map((item) => (
           <Comment

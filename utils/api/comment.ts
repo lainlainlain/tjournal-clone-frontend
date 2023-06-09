@@ -6,8 +6,8 @@ interface CommentDto {
 }
 
 export const CommentApi = (instance: AxiosInstance) => ({
-  async getAll(postId: number) {
-    const { data } = await instance.get('/comments');
+  async getAll(postId?: number) {
+    const { data } = await instance.get('/comments', { params: { postId } });
 
     return data;
   },
@@ -15,5 +15,8 @@ export const CommentApi = (instance: AxiosInstance) => ({
     const { data } = await instance.post<CommentDto, { data: CommentItem }>('/comments', dto);
 
     return data;
+  },
+  async delete(id: number) {
+    return instance.delete('/comments/' + id);
   },
 });

@@ -9,6 +9,7 @@ import { UserApi } from '@/utils/api/user';
 import { setCookie } from 'nookies';
 import { useAppDispatch } from '@/redux/hooks';
 import { setUserData } from '@/redux/slices/user';
+import { Api } from '@/utils/api';
 
 interface RegisterProps {
   onOpenLoginForm: () => void;
@@ -25,7 +26,7 @@ export const Register: React.FC<RegisterProps> = ({ onOpenLoginForm, onOpenRegis
 
   const onSubmit = async (dto: CreateUserDto) => {
     try {
-      const data = await UserApi.register(dto);
+      const data = await Api().user.register(dto);
       setCookie(null, 'authToken', data.token, {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',

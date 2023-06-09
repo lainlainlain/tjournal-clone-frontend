@@ -4,14 +4,15 @@ import styles from './AddComment.module.scss';
 import { useAppSelector } from '@/redux/hooks';
 import { selectUserData } from '@/redux/slices/user';
 import { Api } from '@/utils/api';
+import { CommentItem } from '@/utils/api/types';
 
 interface AddCommentFormProps {
   postId: number;
+  onAddComments: (obj: CommentItem) => void;
 }
 
-export const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId }) => {
+export const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId, onAddComments }) => {
   const [isLoading, setLoading] = React.useState(false);
-  const isAuth = useAppSelector(selectUserData);
   const [selected, setSelected] = React.useState(false);
   const [textValue, setTextValue] = React.useState('');
 
@@ -21,7 +22,7 @@ export const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId }) => {
         postId,
         text: textValue,
       });
-      console.log(comment);
+      onAddComments(comment);
       setLoading(true);
 
       setSelected(false);
@@ -32,10 +33,6 @@ export const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId }) => {
       setLoading(false);
     }
   };
-
-  if (!isAuth) {
-    return null;
-  }
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Button, Paper, Typography } from '@material-ui/core';
+import { Avatar, Button, Paper, Typography } from '@material-ui/core';
 import React, { FC } from 'react';
 import { PostActions } from '../PostActions';
 import MessageIcon from '@material-ui/icons/TextsmsOutlined';
@@ -6,6 +6,8 @@ import UserAddIcon from '@material-ui/icons/PersonAddOutlined';
 
 import styles from './FullPost.module.scss';
 import { OutputData } from '@editorjs/editorjs';
+import { useAppSelector } from '@/redux/hooks';
+import { selectUserData } from '@/redux/slices/user';
 
 interface FullPostProps {
   title: string;
@@ -13,6 +15,7 @@ interface FullPostProps {
 }
 
 export const FullPost: FC<FullPostProps> = ({ title, blocks }) => {
+  const userData = useAppSelector(selectUserData);
   return (
     <Paper elevation={0} className={styles.paper}>
       <div className="container">
@@ -28,11 +31,8 @@ export const FullPost: FC<FullPostProps> = ({ title, blocks }) => {
           </div>
           <div className="d-flex justify-between align-center mt-30 mb-30">
             <div className={styles.userInfo}>
-              <img
-                src="https://leonardo.osnova.io/104b03b4-5173-fd9f-2af9-b458dddc4a23/-/scale_crop/108x108/-/format/webp/"
-                alt="Avatar"
-              />
-              <b>Donnie Darko</b>
+              <Avatar>{userData?.fullName[0]}</Avatar>
+              <b>{userData?.fullName}</b>
               <span>+1685</span>
             </div>
             <div>

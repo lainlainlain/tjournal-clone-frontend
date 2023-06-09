@@ -31,7 +31,7 @@ export type PostItem = {
 };
 
 export type CommentItem = {
-  test: string;
+  text: string;
   post: PostItem;
   user: ResponseUser;
   id: number;

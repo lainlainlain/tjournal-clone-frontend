@@ -21,4 +21,10 @@ export const UserApi = (instance: AxiosInstance) => ({
 
     return data;
   },
+
+  async findOne(id: number) {
+    const { data } = await instance.get<ResponseUser>('/users/' + id);
+
+    return data;
+  },
 });

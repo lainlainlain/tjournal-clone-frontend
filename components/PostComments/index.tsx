@@ -4,20 +4,35 @@ import { Divider, Paper, Tab, Tabs, Typography } from '@material-ui/core';
 import { AddComment } from '@material-ui/icons';
 import { AddCommentForm } from '../AddCommentForm';
 import data from '../../data';
+import { useAppSelector } from '@/redux/hooks';
+import { selectUserData } from '@/redux/slices/user';
+import { Api } from '@/utils/api';
+import { CommentItem, PostItem } from '@/utils/api/types';
+import { useComments } from '@/hooks/useComments';
 
 interface PostCommentsProps {
-  postId: number;
+  post: PostItem;
 }
 
-export const PostComments: React.FC<PostCommentsProps> = ({ postId }) => {
+export const PostComments: React.FC<PostCommentsProps> = ({ post }) => {
+  const userData = useAppSelector(selectUserData);
   const [activeTab, setActiveTab] = React.useState(0);
+  const { comments, setComments } = useComments(post.id);
 
-  const comments = data.comments[activeTab === 0 ? 'popular' : 'new'];
+  const onAddComments = (comment: CommentItem) => {
+    setComments((prev) => [...prev, comment]);
+  };
+
+  const onRemove = (id: number) => {
+    setComments((prev) => prev.filter((obj) => obj.id !== id));
+  };
+
+  // const comments = data.comments[activeTab === 0 ? 'popular' : 'new'];
   return (
     <Paper elevation={0} className="mt-40 p-30">
       <div className="container">
         <Typography variant="h6" className="mb-20">
-          42 комментария
+          {comments.length} комментария
         </Typography>
         <Tabs
           onChange={(_, newValue) => setActiveTab(newValue)}
@@ -29,14 +44,19 @@ export const PostComments: React.FC<PostCommentsProps> = ({ postId }) => {
           <Tab label="По порядку" />
         </Tabs>
         <Divider />
-        <AddCommentForm postId={postId}></AddCommentForm>
+        {userData && (
+          <AddCommentForm onAddComments={onAddComments} postId={post.id}></AddCommentForm>
+        )}
         <div className="mb-20" />
         {comments.map((item) => (
           <Comment
+            onRemove={onRemove}
+            id={item.id}
             key={item.id + Math.random()}
             createdAt={item.createdAt}
             text={item.text}
-            user={item.user}></Comment>
+            user={item.user}
+            currentUserId={userData?.id}></Comment>
         ))}
       </div>
     </Paper>

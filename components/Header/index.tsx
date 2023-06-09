@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Paper, Button, IconButton, Avatar } from '@material-ui/core';
+import { Paper, Button, IconButton, Avatar, ListItem, List } from '@material-ui/core';
 import {
   SearchOutlined as SearchIcon,
   CreateOutlined as PenIcon,
@@ -15,10 +15,19 @@ import styles from './Header.module.scss';
 import { AuthDialog } from '../AuthDialog';
 import { useAppSelector } from '@/redux/hooks';
 import { selectUserData } from '@/redux/slices/user';
+import { PostItem } from '@/utils/api/types';
+import { Api } from '@/utils/api';
+import { useRef, useEffect } from 'react';
+import useComponentVisible from '@/hooks/useComponentVisible';
 
 export const Header: React.FC = () => {
   const userData = useAppSelector(selectUserData);
   const [authVisible, setAuthVisible] = React.useState(false);
+
+  const [searchValue, setSearchValue] = React.useState('');
+  const [posts, setPosts] = React.useState<PostItem[]>([]);
+
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(true);
 
   const openAuthDialog = () => {
     setAuthVisible(true);
@@ -27,6 +36,26 @@ export const Header: React.FC = () => {
   const closeAuthDialog = () => {
     setAuthVisible(false);
   };
+
+  const handleChangeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+    try {
+      const { items } = await Api().post.search({ title: searchValue });
+      setPosts(items);
+    } catch (err) {
+      console.warn('Search post went wrong', err);
+    }
+  };
+
+  React.useEffect(() => {
+    if (searchValue === '') {
+      setPosts((arr) => arr.splice(0, arr.length));
+    }
+  }, [searchValue, ref]);
+
+  console.log(posts);
+  console.log(searchValue);
+  console.log(isComponentVisible);
 
   React.useEffect(() => {
     if (userData && authVisible) {
@@ -49,8 +78,26 @@ export const Header: React.FC = () => {
           />
         </Link>
         <div className={styles.searchBlock}>
-          <SearchIcon />
-          <input placeholder="Поиск" />
+          <SearchIcon></SearchIcon>
+
+          <input
+            ref={ref}
+            value={searchValue}
+            onChange={handleChangeInput}
+            onClick={() => setIsComponentVisible(true)}
+            placeholder="Поиск"
+          />
+          {isComponentVisible && posts.length > 0 && (
+            <Paper className={styles.searchBlockPopup}>
+              <List>
+                {posts.map((obj) => (
+                  <Link key={obj.id} href={`/news/${obj.id}`}>
+                    <ListItem button>{obj.title}</ListItem>
+                  </Link>
+                ))}
+              </List>
+            </Paper>
+          )}
         </div>
         <Link href={'/write'}>
           <Button variant="contained" className={styles.penButton}>
@@ -66,7 +113,7 @@ export const Header: React.FC = () => {
           <NotificationIcon />
         </IconButton>
         {userData ? (
-          <Link href="/profile/1" className="d-flex align-center">
+          <Link href={`/profile/${userData.id}`} className="d-flex align-center">
             <Avatar
               className={styles.avatar}
               alt="Remy Sharp"

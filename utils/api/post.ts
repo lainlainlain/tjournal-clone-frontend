@@ -7,6 +7,15 @@ interface CreatePostDto {
   title: string | undefined;
 }
 
+type SearchPostDto = {
+  title?: string;
+  body?: string;
+  views?: 'DESC' | 'ASC';
+  limit?: number;
+  take?: number;
+  tag?: string;
+};
+
 export const PostApi = (instance: AxiosInstance) => ({
   async getAll() {
     const { data } = await instance.get<PostItem>('/posts');
@@ -25,6 +34,13 @@ export const PostApi = (instance: AxiosInstance) => ({
   },
   async getOne(id: number) {
     const { data } = await instance.get<PostItem>(`/posts/${id}`);
+    return data;
+  },
+  async search(query: SearchPostDto) {
+    const { data } = await instance.get<{ items: PostItem[]; total: number }>('/posts/search', {
+      params: query,
+    });
+
     return data;
   },
 });

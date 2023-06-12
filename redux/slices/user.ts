@@ -18,6 +18,9 @@ export const userSlice = createSlice({
     setUserData(state, action: PayloadAction<ResponseUser>) {
       state.data = action.payload;
     },
+    clearUserData(state) {
+      state.data = null;
+    },
   },
 
   extraReducers: (builder) => {
@@ -30,7 +33,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUserData } = userSlice.actions;
+export const { setUserData, clearUserData } = userSlice.actions;
 
 export const selectUserData = (state: AppState) => state.user.data;
 

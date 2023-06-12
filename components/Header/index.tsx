@@ -14,17 +14,21 @@ import {
 import styles from './Header.module.scss';
 import { AuthDialog } from '../AuthDialog';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { selectUserData } from '@/redux/slices/user';
+import { clearUserData, selectUserData, setUserData } from '@/redux/slices/user';
 import { PostItem } from '@/utils/api/types';
 import { Api } from '@/utils/api';
 
 import useComponentVisible from '@/hooks/useComponentVisible';
 import { toggleSwitchLeftMenu } from '@/redux/slices/left-menu';
+import { UserProfileDropDown } from '../UserProfileDropDown';
+import { destroyCookie } from 'nookies';
 
 export const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
   const [authVisible, setAuthVisible] = React.useState(false);
+  const [profileInfoVisible, setProfileInfoVisible] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [searchValue, setSearchValue] = React.useState('');
   const [posts, setPosts] = React.useState<PostItem[]>([]);
@@ -63,6 +67,21 @@ export const Header: React.FC = () => {
 
   const leftMenuSwitchHandler = () => {
     dispatch(toggleSwitchLeftMenu());
+  };
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    dispatch(clearUserData());
+    destroyCookie({}, 'authToken');
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -115,15 +134,17 @@ export const Header: React.FC = () => {
           <NotificationIcon />
         </IconButton>
         {userData ? (
-          <Link href={`/profile/${userData.id}`} className="d-flex align-center">
-            {/* <Avatar
-              className={styles.avatar}
-              alt="Remy Sharp"
-              src="https://leonardo.osnova.io/5ffeac9a-a0e5-5be6-98af-659bfaabd2a6/-/scale_crop/108x108/-/format/webp/"
-            /> */}
-            <Avatar className={styles.avatar}>{userData.fullName[0]}</Avatar>
-            <ArrowBottom />
-          </Link>
+          <>
+            <Link href={`/profile/${userData.id}`} className="d-flex align-center">
+              <Avatar className={styles.avatar}>{userData.fullName[0]}</Avatar>
+            </Link>
+            <ArrowBottom className={styles.arrowBottom} onClick={handleClick} />
+
+            <UserProfileDropDown
+              handleLogout={handleLogout}
+              anchorEl={anchorEl}
+              handleClose={handleClose}></UserProfileDropDown>
+          </>
         ) : (
           <div className={styles.loginButton} onClick={openAuthDialog}>
             <UserIcon></UserIcon>

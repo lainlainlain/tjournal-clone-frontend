@@ -85,3 +85,11 @@
     margin-right: 10px;
   }
 }
+
+.arrowBottom {
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.3;
+  }
+}

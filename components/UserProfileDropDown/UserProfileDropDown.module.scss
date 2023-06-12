@@ -1,0 +1,36 @@
+.menu {
+  width: 300px;
+  height: 180px;
+  left: '-150%';
+  li {
+    padding: 5px;
+    border-radius: 10px;
+  }
+  p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+}
+
+.menuItem {
+  display: flex;
+}
+
+.userCard {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.userCard__name {
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.userCard__sub_label {
+  font-size: 15px;
+}

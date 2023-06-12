@@ -13,14 +13,17 @@ import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import { Api } from '@/utils/api';
 import { ResponseUser } from '@/utils/api/types';
+import { format, setDefaultOptions } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 interface ProfileProps {
   user: ResponseUser;
 }
 
 const Profile: NextPage<ProfileProps> = ({ user }) => {
+  setDefaultOptions({ locale: ru });
   return (
-    <MainLayout contentFullWidth hideComments>
+    <MainLayout contentFullWidth>
       <Paper className="pl-20 pr-20 pt-20 mb-30" elevation={0}>
         <div className="d-flex justify-between">
           <div>
@@ -49,7 +52,7 @@ const Profile: NextPage<ProfileProps> = ({ user }) => {
           </Typography>
           <Typography>2 подписчика</Typography>
         </div>
-        <Typography>На проекте с 15 сен 2016</Typography>
+        <Typography>На проекте с {format(new Date(user.createdAt), 'do MMMM Y')}</Typography>
 
         <Tabs className="mt-20" value={0} indicatorColor="primary" textColor="primary">
           <Tab label="Статьи" />

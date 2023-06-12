@@ -2,10 +2,10 @@ import React from 'react';
 import clsx from 'clsx';
 import { LeftMenu } from '../components/LeftMenu';
 import { SideComments } from '../components/SideComments';
+import { useAppSelector } from '@/redux/hooks';
+import { selectLeftMenuActive } from '@/redux/slices/left-menu';
 
 interface MainLayoutProps {
-  hideComments?: boolean;
-  hideMenu?: boolean;
   contentFullWidth?: boolean;
   className?: string;
   children?: any;
@@ -14,23 +14,21 @@ interface MainLayoutProps {
 export const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   contentFullWidth,
-  hideComments,
   className,
-  hideMenu,
 }) => {
+  const hideMenu = useAppSelector(selectLeftMenuActive);
   return (
     <div className={clsx('wrapper', className)}>
-      {!hideMenu && (
+      {hideMenu && (
         <div className="leftSide">
           <LeftMenu />
         </div>
       )}
       <div className={clsx('content', { 'content--full': contentFullWidth })}>{children}</div>
-      {!hideComments && (
-        <div className="rightSide">
-          <SideComments />
-        </div>
-      )}
+
+      <div className="rightSide">
+        <SideComments />
+      </div>
     </div>
   );
 };

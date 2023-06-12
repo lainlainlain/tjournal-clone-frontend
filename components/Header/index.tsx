@@ -13,14 +13,16 @@ import {
 
 import styles from './Header.module.scss';
 import { AuthDialog } from '../AuthDialog';
-import { useAppSelector } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { selectUserData } from '@/redux/slices/user';
 import { PostItem } from '@/utils/api/types';
 import { Api } from '@/utils/api';
-import { useRef, useEffect } from 'react';
+
 import useComponentVisible from '@/hooks/useComponentVisible';
+import { toggleSwitchLeftMenu } from '@/redux/slices/left-menu';
 
 export const Header: React.FC = () => {
+  const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
   const [authVisible, setAuthVisible] = React.useState(false);
 
@@ -53,20 +55,20 @@ export const Header: React.FC = () => {
     }
   }, [searchValue, ref]);
 
-  console.log(posts);
-  console.log(searchValue);
-  console.log(isComponentVisible);
-
   React.useEffect(() => {
     if (userData && authVisible) {
       setAuthVisible(false);
     }
   }, [userData, authVisible]);
 
+  const leftMenuSwitchHandler = () => {
+    dispatch(toggleSwitchLeftMenu());
+  };
+
   return (
     <Paper classes={{ root: styles.root }} elevation={0}>
       <div className="d-flex align-center">
-        <IconButton>
+        <IconButton onClick={leftMenuSwitchHandler}>
           <MenuIcon />
         </IconButton>
         <Link href="/">
@@ -114,11 +116,12 @@ export const Header: React.FC = () => {
         </IconButton>
         {userData ? (
           <Link href={`/profile/${userData.id}`} className="d-flex align-center">
-            <Avatar
+            {/* <Avatar
               className={styles.avatar}
               alt="Remy Sharp"
               src="https://leonardo.osnova.io/5ffeac9a-a0e5-5be6-98af-659bfaabd2a6/-/scale_crop/108x108/-/format/webp/"
-            />
+            /> */}
+            <Avatar className={styles.avatar}>{userData.fullName[0]}</Avatar>
             <ArrowBottom />
           </Link>
         ) : (

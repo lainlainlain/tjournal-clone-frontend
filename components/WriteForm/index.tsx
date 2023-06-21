@@ -54,14 +54,14 @@ export const WriteForm: React.FC<WriteFormProps> = ({ data }) => {
           onChange={(arr) => setBlocks(arr)}
           holder={'editor'}
         />
+        <Button
+          disabled={isLoading || !blocks.length || !title}
+          onClick={onAddPost}
+          variant="contained"
+          color="primary">
+          {data ? 'Сохранить' : 'Опубликовать'}
+        </Button>
       </div>
-      <Button
-        disabled={isLoading || !blocks.length || !title}
-        onClick={onAddPost}
-        variant="contained"
-        color="primary">
-        {data ? 'Сохранить' : 'Опубликовать'}
-      </Button>
     </div>
   );
 };

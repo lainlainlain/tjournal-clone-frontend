@@ -5,8 +5,11 @@ import MoreIcon from '@material-ui/icons/MoreHorizOutlined';
 import styles from './Comment.module.scss';
 import { useAppSelector } from '@/redux/hooks';
 import { selectUserData } from '@/redux/slices/user';
-import { ResponseUser } from '@/utils/api/types';
+import { CommentItem, ResponseUser } from '@/utils/api/types';
 import { Api } from '@/utils/api';
+import { AddCommentForm } from '../AddCommentForm';
+import { useComments } from '@/hooks/useComments';
+import { CommentUpdateDto } from '@/utils/api/comment';
 
 interface CommentProps {
   id: number;
@@ -15,6 +18,9 @@ interface CommentProps {
   text: string;
   currentUserId?: number;
   onRemove: (id: number) => void;
+  onSetActiveForm: (id: number) => void;
+  activeAnswerForm: number | undefined;
+  onEditComment?: (obj: CommentUpdateDto) => void;
 }
 
 export const Comment: React.FC<CommentProps> = ({
@@ -24,8 +30,12 @@ export const Comment: React.FC<CommentProps> = ({
   currentUserId,
   id,
   onRemove,
+  onSetActiveForm,
+  activeAnswerForm,
+  onEditComment,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const { comments, setComments } = useComments();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -36,13 +46,27 @@ export const Comment: React.FC<CommentProps> = ({
   };
 
   const handleCommentDelete = async () => {
-    handleClose();
-    try {
-      await Api().comment.delete(id);
-      onRemove(id);
-    } catch (err) {
-      console.warn('Deletion went wrong', err);
+    if (window.confirm('Удалить комменатрий?')) {
+      try {
+        await Api().comment.delete(id);
+        onRemove(id);
+      } catch (err) {
+        console.warn('Deletion went wrong', err);
+      } finally {
+        handleClose();
+      }
     }
+  };
+
+  const handleCommentUpdate = () => {};
+
+  // TODO:
+  // Сделать добавления комментария к комментарию
+  const onAddComments = (comment: CommentItem) => {
+    setComments((prev) => [...prev, comment]);
+  };
+  const onDeleteComment = (id: number) => {
+    setComments((prev) => prev.filter((obj) => obj.id !== id));
   };
 
   return (
@@ -53,7 +77,12 @@ export const Comment: React.FC<CommentProps> = ({
         <span>{createdAt}</span>
       </div>
       <Typography className={styles.text}>{text}</Typography>
-      {currentUserId && <span className={styles.replyBtn}>Ответить</span>}
+      {currentUserId && (
+        <span className={styles.replyBtn} onClick={() => onSetActiveForm(id)}>
+          Ответить
+        </span>
+      )}
+
       {user.id === currentUserId && (
         <>
           <IconButton onClick={handleClick}>
@@ -66,9 +95,15 @@ export const Comment: React.FC<CommentProps> = ({
             onClose={handleClose}
             keepMounted>
             <MenuItem onClick={handleCommentDelete}>Удалить</MenuItem>
-            <MenuItem onClick={handleClose}>Редактировать</MenuItem>
+            <MenuItem onClick={() => onSetActiveForm(id)}>Редактировать</MenuItem>
           </Menu>
         </>
+      )}
+      {activeAnswerForm === id && (
+        <AddCommentForm
+          commentFormCase={'update'}
+          commentId={id}
+          onEditComment={onEditComment}></AddCommentForm>
       )}
     </div>
   );

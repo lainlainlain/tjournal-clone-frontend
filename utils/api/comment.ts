@@ -2,7 +2,11 @@ import { AxiosInstance } from 'axios';
 import { CommentItem, PostItem } from './types';
 interface CommentDto {
   text: string;
-  postId: number;
+  postId?: number;
+}
+export interface CommentUpdateDto {
+  text: string;
+  id: number;
 }
 
 export const CommentApi = (instance: AxiosInstance) => ({
@@ -18,5 +22,10 @@ export const CommentApi = (instance: AxiosInstance) => ({
   },
   async delete(id: number) {
     return instance.delete('/comments/' + id);
+  },
+
+  async update(id: number, dto: CommentUpdateDto) {
+    const { data } = await instance.patch('/comments/' + id, dto);
+    return data;
   },
 });

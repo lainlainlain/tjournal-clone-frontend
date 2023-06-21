@@ -5,24 +5,48 @@ import { useAppSelector } from '@/redux/hooks';
 import { selectUserData } from '@/redux/slices/user';
 import { Api } from '@/utils/api';
 import { CommentItem } from '@/utils/api/types';
+import { CommentUpdateDto } from '@/utils/api/comment';
 
 interface AddCommentFormProps {
-  postId: number;
-  onAddComments: (obj: CommentItem) => void;
+  postId?: number;
+  onAddComments?: (obj: CommentItem) => void;
+  onEditComment?: (obj: CommentUpdateDto) => void;
+  commentFormCase?: 'add' | 'update';
+  commentId?: number;
 }
 
-export const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId, onAddComments }) => {
+export const AddCommentForm: React.FC<AddCommentFormProps> = ({
+  postId,
+  onAddComments,
+  commentFormCase,
+  commentId,
+  onEditComment,
+}) => {
   const [isLoading, setLoading] = React.useState(false);
   const [selected, setSelected] = React.useState(false);
   const [textValue, setTextValue] = React.useState('');
 
   const addComment = async () => {
     try {
-      const comment = await Api().comment.create({
-        postId,
-        text: textValue,
-      });
-      onAddComments(comment);
+      if (commentFormCase === 'add') {
+        const comment = await Api().comment.create({
+          postId,
+          text: textValue,
+        });
+
+        onAddComments!(comment);
+      }
+      if (commentFormCase === 'update' && commentId) {
+        const comment = await Api().comment.update(commentId, {
+          id: commentId,
+          text: textValue,
+        });
+
+        onEditComment!({
+          id: comment.id,
+          text: comment.text,
+        });
+      }
       setLoading(true);
 
       setSelected(false);
@@ -45,15 +69,19 @@ export const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId, onAddCom
           multiline
           classes={{ root: styles.fieldRoot }}
           fullWidth
-          placeholder="Напишите ваш комментарий..."></Input>
+          placeholder={
+            commentFormCase === 'add'
+              ? 'Напишите ваш комментарий...'
+              : 'Редактировать комментарий...'
+          }></Input>
+        {selected && (
+          <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'flex-start' }}>
+            <Button disabled={isLoading} variant="contained" color="primary" onClick={addComment}>
+              {commentFormCase === 'add' ? 'Опубликовать' : 'Сохранить'}
+            </Button>
+          </div>
+        )}
       </div>
-      {selected && (
-        <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'flex-start' }}>
-          <Button disabled={isLoading} variant="contained" color="primary" onClick={addComment}>
-            Опубликовать
-          </Button>
-        </div>
-      )}
     </>
   );
 };

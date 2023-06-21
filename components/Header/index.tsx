@@ -27,11 +27,11 @@ export const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
   const [authVisible, setAuthVisible] = React.useState(false);
-  const [profileInfoVisible, setProfileInfoVisible] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [searchValue, setSearchValue] = React.useState('');
   const [posts, setPosts] = React.useState<PostItem[]>([]);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(true);
 

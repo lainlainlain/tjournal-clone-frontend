@@ -11,7 +11,7 @@ interface AddCommentFormProps {
   postId?: number;
   onAddComments?: (obj: CommentItem) => void;
   onEditComment?: (obj: CommentUpdateDto) => void;
-  commentFormCase?: 'add' | 'update';
+  commentFormCase?: 'add' | 'update' | 'reply';
   commentId?: number;
 }
 
@@ -52,7 +52,7 @@ export const AddCommentForm: React.FC<AddCommentFormProps> = ({
       setSelected(false);
       setTextValue('');
     } catch (err) {
-      console.warn('Add comment err', err);
+      console.warn('Some comment err', err);
     } finally {
       setLoading(false);
     }
@@ -70,9 +70,9 @@ export const AddCommentForm: React.FC<AddCommentFormProps> = ({
           classes={{ root: styles.fieldRoot }}
           fullWidth
           placeholder={
-            commentFormCase === 'add'
+            commentFormCase !== 'update'
               ? 'Напишите ваш комментарий...'
-              : 'Редактировать комментарий...'
+              : 'Редактировать ваш комментарий...'
           }></Input>
         {selected && (
           <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'flex-start' }}>

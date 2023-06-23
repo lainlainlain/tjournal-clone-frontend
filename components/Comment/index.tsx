@@ -3,8 +3,6 @@ import { Typography, IconButton, MenuItem, Menu, Avatar } from '@material-ui/cor
 import MoreIcon from '@material-ui/icons/MoreHorizOutlined';
 
 import styles from './Comment.module.scss';
-import { useAppSelector } from '@/redux/hooks';
-import { selectUserData } from '@/redux/slices/user';
 import { CommentItem, ResponseUser } from '@/utils/api/types';
 import { Api } from '@/utils/api';
 import { AddCommentForm } from '../AddCommentForm';
@@ -35,6 +33,7 @@ export const Comment: React.FC<CommentProps> = ({
   onEditComment,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [replyActive, setReplyActive] = React.useState<boolean>();
   const { comments, setComments } = useComments();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -78,7 +77,12 @@ export const Comment: React.FC<CommentProps> = ({
       </div>
       <Typography className={styles.text}>{text}</Typography>
       {currentUserId && (
-        <span className={styles.replyBtn} onClick={() => onSetActiveForm(id)}>
+        <span
+          className={styles.replyBtn}
+          onClick={() => {
+            onSetActiveForm(id);
+            setReplyActive(true);
+          }}>
           Ответить
         </span>
       )}
@@ -95,13 +99,19 @@ export const Comment: React.FC<CommentProps> = ({
             onClose={handleClose}
             keepMounted>
             <MenuItem onClick={handleCommentDelete}>Удалить</MenuItem>
-            <MenuItem onClick={() => onSetActiveForm(id)}>Редактировать</MenuItem>
+            <MenuItem
+              onClick={() => {
+                onSetActiveForm(id);
+                setReplyActive(false);
+              }}>
+              Редактировать
+            </MenuItem>
           </Menu>
         </>
       )}
       {activeAnswerForm === id && (
         <AddCommentForm
-          commentFormCase={'update'}
+          commentFormCase={replyActive ? 'reply' : 'update'}
           commentId={id}
           onEditComment={onEditComment}></AddCommentForm>
       )}

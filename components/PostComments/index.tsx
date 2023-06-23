@@ -26,16 +26,13 @@ export const PostComments: React.FC<PostCommentsProps> = ({ post }) => {
   };
 
   const onEditComment = (comment: CommentUpdateDto) => {
-    setComments((prev) =>
-      prev.map((obj) => {
-        if (obj.id === comment.id) {
-          return {
-            ...prev,
-            comment,
-          };
-        }
-      }),
-    );
+    let updatedComments = comments.map((obj) => {
+      if (obj.id === comment.id) {
+        return { ...obj, id: comment.id, text: comment.text };
+      }
+      return obj;
+    });
+    setComments(updatedComments);
   };
 
   const onRemove = (id: number) => {

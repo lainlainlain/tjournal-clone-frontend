@@ -14,9 +14,10 @@ interface PostProps {
 }
 
 const Post: NextPage<PostProps> = ({ post }) => {
+  console.log(post);
   return (
     <MainLayout className="mb-50" contentFullWidth>
-      <FullPost title={post.title} blocks={post.body} />
+      <FullPost title={post.title} blocks={post.body} views={post.views} />
       <PostComments post={post}></PostComments>
     </MainLayout>
   );

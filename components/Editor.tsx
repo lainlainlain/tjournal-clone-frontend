@@ -2,7 +2,7 @@ import React, { FC, memo, useEffect, useRef } from 'react';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 
 interface EditorProps {
-  initialBlocks?: OutputData['blocks'];
+  initialBlocks: OutputData['blocks'];
   onChange: (blocks: OutputData['blocks']) => void;
   holder: string;
 }

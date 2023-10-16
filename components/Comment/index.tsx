@@ -33,7 +33,7 @@ export const Comment: React.FC<CommentProps> = ({
   onEditComment,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-  const [replyActive, setReplyActive] = React.useState<boolean>();
+  const [activeForm, setActiveForm] = React.useState<'reply' | 'update'>();
   const { comments, setComments } = useComments();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -81,7 +81,7 @@ export const Comment: React.FC<CommentProps> = ({
           className={styles.replyBtn}
           onClick={() => {
             onSetActiveForm(id);
-            setReplyActive(true);
+            setActiveForm('reply');
           }}>
           Ответить
         </span>
@@ -102,7 +102,7 @@ export const Comment: React.FC<CommentProps> = ({
             <MenuItem
               onClick={() => {
                 onSetActiveForm(id);
-                setReplyActive(false);
+                setActiveForm('update');
               }}>
               Редактировать
             </MenuItem>
@@ -111,7 +111,7 @@ export const Comment: React.FC<CommentProps> = ({
       )}
       {activeAnswerForm === id && (
         <AddCommentForm
-          commentFormCase={replyActive ? 'reply' : 'update'}
+          commentFormCase={activeForm === 'reply' ? 'reply' : 'update'}
           commentId={id}
           onEditComment={onEditComment}></AddCommentForm>
       )}

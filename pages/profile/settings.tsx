@@ -1,31 +1,31 @@
-import { Button, Divider, Paper, TextField, Typography } from '@material-ui/core';
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import { MainLayout } from '../../layouts/MainLayout';
 
 export default function Settings() {
   return (
-    <MainLayout hideComments>
+    <MainLayout>
       <Paper className="p-20" elevation={0}>
         <Typography variant="h6">Основные настройки</Typography>
-        <Divider className="mt-20 mb-30" />
         <form>
-          <TextField
-            className="mb-20"
-            size="small"
-            label="Никнейм"
-            variant="outlined"
-            fullWidth
-            required
-          />
-          <TextField
-            className="mb-20"
-            size="small"
-            label="Эл. почта"
-            variant="outlined"
-            fullWidth
-            required
-          />
-          <TextField size="small" label="Пароль" variant="outlined" fullWidth required />
-          <Divider className="mt-30 mb-20" />
+          <FormControl variant="outlined" fullWidth margin="normal">
+            <InputLabel htmlFor="nickname">Никнейм</InputLabel>
+            <OutlinedInput id="nickname" label="Никнейм" required />
+          </FormControl>
+          <FormControl variant="outlined" fullWidth margin="normal">
+            <InputLabel htmlFor="email">Эл. почта</InputLabel>
+            <OutlinedInput id="email" label="Эл. почта" required />
+          </FormControl>
+          <FormControl variant="outlined" fullWidth margin="normal">
+            <InputLabel htmlFor="password">Пароль</InputLabel>
+            <OutlinedInput id="password" label="Пароль" required />
+          </FormControl>
           <Button color="primary" variant="contained">
             Сохранить изменения
           </Button>

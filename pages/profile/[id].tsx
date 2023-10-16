@@ -7,8 +7,6 @@ import {
 
 import { Post } from '../../components/Post';
 import { MainLayout } from '../../layouts/MainLayout';
-import { useAppSelector } from '@/redux/hooks';
-import { selectUserData } from '@/redux/slices/user';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import { Api } from '@/utils/api';

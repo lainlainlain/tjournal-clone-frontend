@@ -26,7 +26,7 @@ export const AddCommentForm: React.FC<AddCommentFormProps> = ({
   const [selected, setSelected] = React.useState(false);
   const [textValue, setTextValue] = React.useState('');
 
-  const addComment = async () => {
+  const changeComment = async () => {
     try {
       if (commentFormCase === 'add') {
         const comment = await Api().comment.create({
@@ -76,7 +76,11 @@ export const AddCommentForm: React.FC<AddCommentFormProps> = ({
           }></Input>
         {selected && (
           <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'flex-start' }}>
-            <Button disabled={isLoading} variant="contained" color="primary" onClick={addComment}>
+            <Button
+              disabled={isLoading}
+              variant="contained"
+              color="primary"
+              onClick={changeComment}>
               {commentFormCase === 'add' ? 'Опубликовать' : 'Сохранить'}
             </Button>
           </div>

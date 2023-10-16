@@ -12,9 +12,10 @@ import { selectUserData } from '@/redux/slices/user';
 interface FullPostProps {
   title: string;
   blocks: OutputData['blocks'];
+  views: number;
 }
 
-export const FullPost: FC<FullPostProps> = ({ title, blocks }) => {
+export const FullPost: FC<FullPostProps> = ({ title, blocks, views }) => {
   const userData = useAppSelector(selectUserData);
   return (
     <Paper elevation={0} className={styles.paper}>
@@ -26,6 +27,9 @@ export const FullPost: FC<FullPostProps> = ({ title, blocks }) => {
           {blocks.map((obj) => (
             <Typography dangerouslySetInnerHTML={{ __html: obj.data.text }} key={obj.id} />
           ))}
+          <div className={styles.views}>
+            <span>{views} просмотров</span>
+          </div>
           <div style={{ width: 250, marginLeft: -14 }}>
             <PostActions />
           </div>
@@ -35,6 +39,7 @@ export const FullPost: FC<FullPostProps> = ({ title, blocks }) => {
               <b>{userData?.fullName}</b>
               <span>+1685</span>
             </div>
+
             <div>
               <Button variant="contained" className="mr-15">
                 <MessageIcon />

@@ -28,6 +28,7 @@ export const Post: React.FC<PostProps> = ({ id, title, description, imageUrl }) 
           alt="tbd"
         />
       )}
+
       <PostActions />
     </Paper>
   );

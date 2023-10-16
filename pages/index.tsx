@@ -37,6 +37,7 @@ export default Home;
 export const getServerSideProps = async () => {
   try {
     const posts = await Api().post.getAll();
+
     return {
       props: {
         posts,
